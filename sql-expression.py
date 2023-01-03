@@ -29,7 +29,7 @@ track_table = Table(
     Column("AlbumId", Integer, ForeignKey("album_table.AlbumId")),
     Column("MediaTypeId", Integer, primary_key=False),
     Column("GenreId", Integer, primary_key=False),
-    Column("Compose", String),
+    Column("Composer", String),
     Column("Milliseconds", Integer),
     Column("Bytes", Integer),
     Column("UnitPrice", Float)
@@ -38,8 +38,28 @@ track_table = Table(
 # making the connection
 with db.connect() as connection:
 
-    # Querey 1 - Select all the records from the "Artist" table
-    select_query = artist_table.select()
+    # Query 1 - Select all the records from the "Artist" table
+    # select_query = artist_table.select()
+
+    # Query 2 - Select only the "Name" column from the "Artist" table
+    # select_query = artist_table.select().with_only_columns
+    # ([artist_table.c.Name])
+
+    # Query 3 - Select only "Queen" from the "Artist" table
+    # select_query = artist_table.select().where(artist_table.c.Name ==
+    # "Queen")
+
+    # Query 4 - Select only by "ArtistId" #51 from the "Artist" table
+    # select_query = artist_table.select().where(artist_table.c.ArtistId == 51)
+
+    # Query 5 - Select only the albums with the "ArtistId" #51 on the "Album"
+    # table
+    # select_query = album_table.select().where(album_table.c.ArtistId == 51)
+
+    # Qery 6 - Select all tracks where the "Composer" is "Queen" from the
+    # "track" table
+    select_query = track_table.select().\
+        where(track_table.c.Composer == "Queen")
 
     results = connection.execute(select_query)
     for result in results:
